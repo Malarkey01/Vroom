@@ -124,3 +124,7 @@ Some ideas:
     * Rin it in ```SCHED_FIFO```
     * Could also replace it with a Jack + PREEMPT_RT path.
 
+* Make the entire project portable.
+    * I would like to set up this project in a way where you don't need to manually download all the necessary packages.
+    * Everything will be self-contained in a single folder.
+
