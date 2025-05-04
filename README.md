@@ -52,7 +52,7 @@ From the Main Window, if you pressed the Vehicle Information button, you will be
   <img src="docs/images/Info.png" alt="Vehicle Info" width="600"/>
 </p>
 
-Once you have successfully connected 
+Once you have successfully connected, you will be able to see some of your vehicle information.
 
 <p align="center">
   <img src="docs/images/InfoData.png" alt="OBD-II Data" width="600"/>
@@ -61,7 +61,11 @@ Once you have successfully connected
 
 ### 4. Settings
 
+When you press the settings button on the main window, you will be greeted with the following screen:
+
 <p align="center">
   <img src="docs/images/SettingsWindow.png" alt="Worst/Best Case Times" width="600"/>
 </p>
 
+You can manually adjust the brighntess and volume using the touch screen (or the rotary encoder if you prefer).\
+You also have the option to select different audio outputs that are already connected to the Pi.

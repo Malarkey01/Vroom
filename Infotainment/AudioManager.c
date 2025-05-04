@@ -15,6 +15,33 @@
  * ------------------------------------------------------------------------- */
 static char *g_current_sink = NULL;
 
+/* --------------------------------------------------------------------- */
+void audio_manager_init(void)
+/* ---------------------------------------------------------------------
+ *  Cache the system-wide default sink so that get_current_sink() is
+ *  non-NULL from the very beginning (rotary encoder works right away).
+ * --------------------------------------------------------------------- */
+{
+    if (g_current_sink)                /* already done */
+        return;
+
+    FILE *fp = popen("pactl info", "r");
+    if (!fp)
+        return;
+
+    char line[256];
+    while (fgets(line, sizeof line, fp)) {
+        if (g_str_has_prefix(line, "Default Sink:")) {
+            char *name = line + strlen("Default Sink:");
+            g_strstrip(name);          /* trim spaces/newline */
+            g_current_sink = g_strdup(name);
+            break;
+        }
+    }
+    pclose(fp);
+}
+
+
 /* ------------------------------------------------------------------------- */
 GSList *get_audio_sinks(void)
 /* -------------------------------------------------------------------------

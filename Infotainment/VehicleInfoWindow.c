@@ -21,7 +21,7 @@
 /* ------------------------------------------------------------------ */
 /*  Settings                                                          */
 /* ------------------------------------------------------------------ */
-static const char SCRIPT_PATH[]      = "Infotainment/scripts/obd_reader.py";
+static const char SCRIPT_PATH[]      = "../scripts/obd_reader.py";
 static const int  RETRY_INTERVAL_SEC = 10;
 
 static const char *columns[] = {
@@ -94,7 +94,7 @@ GtkWidget *create_vehicle_info_window(GtkWindow *parent)
     GtkWidget *back = gtk_button_new();
     {
         GdkPixbuf *pix = gdk_pixbuf_new_from_file_at_scale(
-            "Infotainment/images/Back.png", 100, 100, TRUE, NULL);
+            "images/Back.png", 100, 100, TRUE, NULL);
         GtkWidget *img = gtk_image_new_from_pixbuf(pix);
         g_object_unref(pix);
         gtk_button_set_image(GTK_BUTTON(back), img);
@@ -313,8 +313,10 @@ static void hide_cursor_on_realize(GtkWidget *w, gpointer)
     GdkDisplay *d = gdk_window_get_display(gw);
     GdkPixbuf *pb = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, 1, 1);
     gdk_pixbuf_fill(pb, 0);
+    // GdkCursor *c = gdk_cursor_new_from_pixbuf(d, pb, 0, 0);
+    // gdk_window_set_cursor(gw, c);
+    // g_object_unref(c);
     GdkCursor *c = gdk_cursor_new_from_pixbuf(d, pb, 0, 0);
     gdk_window_set_cursor(gw, c);
-    g_object_unref(c);
     g_object_unref(pb);
 }

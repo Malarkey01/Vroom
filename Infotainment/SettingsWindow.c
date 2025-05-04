@@ -33,6 +33,7 @@ static void     hide_cursor_on_realize(GtkWidget *, gpointer);
 static void     on_back_clicked       (GtkButton *, gpointer);
 static gboolean on_bri_released       (GtkWidget *, GdkEventButton *, gpointer);
 static gboolean on_vol_released       (GtkWidget *, GdkEventButton *, gpointer);
+static void on_settings_destroy(GtkWidget *, gpointer);
 static void     on_sink_changed       (GtkComboBoxText *, gpointer);
 
 static GtkWidget *create_img_button   (const char *path, int w, int h);
@@ -65,7 +66,7 @@ void open_settings_window(GtkWindow *parent)
     gtk_container_add(GTK_CONTAINER(win), vbox);
 
     /* Back button ---------------------------------------------------- */
-    GtkWidget *back = create_img_button("Infotainment/images/Back.png", 100, 100);
+    GtkWidget *back = create_img_button("images/Back.png", 100, 100);
     g_signal_connect(back, "clicked", G_CALLBACK(on_back_clicked), win);
     gtk_widget_set_halign(back, GTK_ALIGN_START);
     gtk_box_pack_start(GTK_BOX(vbox), back, FALSE, FALSE, 0);
@@ -125,6 +126,8 @@ void open_settings_window(GtkWindow *parent)
     g_vol_scale = vol_scale;
 
     gtk_widget_show_all(win);
+    /* When the window is destroyed, invalidate the global slider handles */
+    g_signal_connect(win, "destroy", G_CALLBACK(on_settings_destroy), NULL);
 }
 
 /* ------------------------------------------------------------------ */
@@ -146,19 +149,31 @@ void settings_update_volume_slider(int pct_0_100)
 /* ------------------------------------------------------------------ */
 static gboolean update_bri_idle(gpointer data)
 {
-    if (g_bri_scale)
+    if (g_bri_scale && GTK_IS_RANGE(g_bri_scale))
         gtk_range_set_value(GTK_RANGE(g_bri_scale),
-            ((IntVal*)data)->value * 100.0 / 31.0);
+            ((IntVal*)data)->value * 100.0 / 31.0);   /* 0-31  →  0-100 % */
     g_free(data);
     return G_SOURCE_REMOVE;
 }
+
+/* Volume slider from rotary encoder */
 static gboolean update_vol_idle(gpointer data)
 {
-    if (g_vol_scale)
+    if (g_vol_scale && GTK_IS_RANGE(g_vol_scale))
         gtk_range_set_value(GTK_RANGE(g_vol_scale),
-            (gdouble)((IntVal*)data)->value);
+            (gdouble)((IntVal*)data)->value);         /* already 0-100 % */
     g_free(data);
     return G_SOURCE_REMOVE;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Settings window destroy handler                              */
+/* ------------------------------------------------------------------ */
+static void on_settings_destroy(GtkWidget *, gpointer)
+{
+    /* Widgets are gone — stop the rotary callbacks from touching them */
+    g_bri_scale = NULL;
+    g_vol_scale = NULL;
 }
 
 static gboolean on_key_press(GtkWidget *w, GdkEventKey *e, gpointer)
@@ -177,9 +192,11 @@ static void hide_cursor_on_realize(GtkWidget *w, gpointer)
 
     GdkPixbuf *pb = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, 1, 1);
     gdk_pixbuf_fill(pb, 0);
+    // GdkCursor *c = gdk_cursor_new_from_pixbuf(d, pb, 0, 0);
+    // gdk_window_set_cursor(gw, c);
+    // g_object_unref(c);
     GdkCursor *c = gdk_cursor_new_from_pixbuf(d, pb, 0, 0);
     gdk_window_set_cursor(gw, c);
-    g_object_unref(c);
     g_object_unref(pb);
 }
 

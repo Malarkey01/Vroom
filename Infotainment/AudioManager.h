@@ -29,6 +29,13 @@ GSList *get_audio_sinks(void);
 void set_default_sink(const char *sink_name);
 
 /* -------------------------------------------------------------------------
+ *  audio_manager_init
+ *  ------------------------------------------------------------------------
+ *  Discover the current PulseAudio *default sink* at startup
+ * ------------------------------------------------------------------------- */
+void audio_manager_init(void);
+
+/* -------------------------------------------------------------------------
  *  get_current_sink
  *  ------------------------------------------------------------------------
  *  Returns the sink name that was most recently passed to
