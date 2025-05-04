@@ -131,8 +131,10 @@ GtkWidget *create_vehicle_info_window(GtkWindow *parent)
         gtk_widget_set_halign(key, GTK_ALIGN_START);
         gtk_grid_attach(GTK_GRID(grid), key, 0, i, 1, 1);
 
-        ctx->value_lbls[i] = gtk_label_new(
-            "<span font_desc='Sans 38' foreground='#00AAFF'>--</span>");
+        ctx->value_lbls[i] = gtk_label_new(NULL);
+        gtk_label_set_markup(GTK_LABEL(ctx->value_lbls[i]),
+        "<span font_desc='Sans 38' foreground='#00AAFF'>--</span>");
+
         gtk_widget_set_halign(ctx->value_lbls[i], GTK_ALIGN_END);
         gtk_grid_attach(GTK_GRID(grid), ctx->value_lbls[i], 1, i, 1, 1);
     }
