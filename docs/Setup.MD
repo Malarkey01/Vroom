@@ -136,22 +136,6 @@ void AndroidAutoEntity::stop(){
 
 }
 ```
-### Check for a GStreamer or Qt Multimedia backend
-
-OpenAuto typically uses Qt’s QMediaPlayer or GStreamer for video. We installed Qt Multimedia packages and GStreamer plugin sets:
-
-``` bash
-sudo apt-get install -y \
-  qtmultimedia5-dev \
-  qml-module-qtmultimedia \
-  libqt5multimedia5-plugins \
-  gstreamer1.0-plugins-base \
-  gstreamer1.0-plugins-good \
-  gstreamer1.0-plugins-bad \
-  gstreamer1.0-libav
-```
-
-(We did this so that we don’t see “no service found for org.qt-project.qt.mediaplayer” and end up with a white screen.)
 
 ### Build OpenAuto
 
