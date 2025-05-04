@@ -64,7 +64,7 @@ sudo apt-get install -y \
 ```
 ### Install AASDK (Patched to Remove Deprecated OpenSSL Calls)
 
-Originally, the classic AASDK code references old OpenSSL calls like FIPS_mode_set(0), which fails on OpenSSL 3.0 (the default in Debian 12/Bookworm). Also, it references private boost::asio::detail classes that can cause compilation errors on newer Boost. We ended up using a version of AASDK that we patched so that it no longer calls FIPS_mode_set(0), or we removed those lines in src/Transport/SSLWrapper.cpp.
+Originally, the classic AASDK code references old OpenSSL calls like ```FIPS_mode_set(0)```, which fails on OpenSSL 3.0 (the default in Debian 12/Bookworm). Also, it references private ```boost::asio::detail``` classes that can cause compilation errors on newer Boost. We ended up using a version of AASDK that we patched so that it no longer calls ```FIPS_mode_set(0)```, or we removed those lines in ```src/Transport/SSLWrapper.cpp```.
 
 ### Clone AASDK
 
@@ -76,7 +76,7 @@ cd aasdk
 
 ### Patch out FIPS_mode_set(0) and ERR_load_BIO_strings()
 
-OpenSSL 3.0 removed them. In src/Transport/SSLWrapper.cpp, look for lines like:
+OpenSSL 3.0 removed them. In ```src/Transport/SSLWrapper.cpp```, look for lines like:
 
 ``` c
 ERR_load_BIO_strings();
@@ -97,7 +97,7 @@ sudo ldconfig
 
 ## Install H264bitstream
 
-OpenAuto tries to link with -lh264bitstream, but Debian 12/Bookworm doesn’t provide a libh264bitstream-dev package. So we built it from source:
+OpenAuto tries to link with ```-lh264bitstream```, but Debian 12/Bookworm doesn’t provide a libh264bitstream-dev package. So we built it from source:
 
 ``` bash
 cd ~
@@ -123,9 +123,9 @@ cd OpenAuto
 
 ### Patch OpenAuto to Actually Exit When “Exit” Is Pressed (If Desired)
 
-In original OpenAuto, pressing Android Auto’s built-in “Exit” on the phone might just disconnect from the phone but not kill autoapp. If we want it to truly exit, we can modify AndroidAutoEntity::stop() or AndroidAutoEntity::destroy() so it calls std::exit(0) (or QCoreApplication::exit(0)).
+In original OpenAuto, pressing Android Auto’s built-in “Exit” on the phone might just disconnect from the phone but not kill autoapp. If we want it to truly exit, we can modify ```AndroidAutoEntity::stop()``` or ```AndroidAutoEntity::destroy()``` so it calls ```std::exit(0)``` (or ```QCoreApplication::exit(0)```).
 
-For example, a typical patch might be in AndroidAutoEntity.cpp:
+For example, a typical patch might be in ```AndroidAutoEntity.cpp```:
 
 ``` cpp
 void AndroidAutoEntity::stop(){
